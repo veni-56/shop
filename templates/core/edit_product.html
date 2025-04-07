@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card border-0 shadow-lg p-4">
+        <div class="text-center mb-4">
+          <h2 class="text-primary">
+            <i class="bi bi-pencil-square"></i> Edit Product
+          </h2>
+          <hr>
+          <p class="text-muted">Update the product details below</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.as_p }}
+          </div>
+          <button type="submit" class="btn btn-success w-100 mt-3">
+            <i class="bi bi-save"></i> Save Changes
+          </button>
+        </form>
+
+        <div class="d-flex justify-content-between mt-4">
+          <a href="{% url 'dashboard' %}" class="btn btn-outline-dark w-50 me-2">
+            <i class="bi bi-house-door"></i> Dashboard
+          </a>
+          <a href="{% url 'vendor_products' %}" class="btn btn-outline-info w-50 ms-2">
+            <i class="bi bi-box-seam"></i> Your Products
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

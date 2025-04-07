@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background: linear-gradient(135deg, #6610f2, #007bff);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-card {
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, #007bff, #6610f2);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .form-floating label {
+        color: #6c757d;
+    }
+
+    .form-control {
+        border-radius: 10px;
+    }
+
+    .btn-login {
+        background-color: #007bff;
+        color: white;
+        border-radius: 10px;
+        transition: 0.3s ease;
+    }
+
+    .btn-login:hover {
+        background-color: #0056b3;
+        transform: scale(1.02);
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg login-card">
+                <div class="login-header">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Login to Your Account
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                            <label for="username">Username</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                            <label for="password">Password</label>
+                        </div>
+
+                        <button type="submit" class="btn btn-login w-100 mt-3">
+                            <i class="bi bi-door-open me-1"></i> Login
+                        </button>
+                    </form>
+
+                    <p class="mt-3 text-center text-muted">
+                        Don't have an account? <a href="{% url 'register' %}">Register here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

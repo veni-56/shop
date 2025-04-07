@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .add-product-container {
+    max-width: 650px;
+    margin: 60px auto;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .add-product-container h2 {
+    text-align: center;
+    margin-bottom: 35px;
+    color: #0d6efd;
+    font-weight: 600;
+  }
+
+  .add-product-container label {
+    display: block;
+    margin-top: 18px;
+    font-weight: 600;
+    color: #333;
+    font-size: 15px;
+  }
+
+  .add-product-container input,
+  .add-product-container textarea,
+  .add-product-container select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 15px;
+    background-color: #fefefe;
+    transition: border-color 0.2s ease-in-out;
+  }
+
+  .add-product-container input:focus,
+  .add-product-container textarea:focus,
+  .add-product-container select:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.2);
+  }
+
+  .add-product-container button[type="submit"] {
+    margin-top: 30px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+
+  .add-product-container button[type="submit"]:hover {
+    background-color: #0b5ed7;
+  }
+
+  .btn-link-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+  }
+
+  .btn-link-group a {
+    flex: 1;
+    padding: 12px 16px;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .btn-outline-primary {
+    color: #0d6efd;
+    border: 1px solid #0d6efd;
+  }
+
+  .btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+  }
+
+  .btn-outline-secondary {
+    color: #6c757d;
+    border: 1px solid #6c757d;
+  }
+
+  .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+  }
+</style>
+
+<div class="add-product-container">
+  <h2><i class="bi bi-box-seam"></i> Add New Product</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit"><i class="bi bi-plus-circle"></i> Add Product</button>
+  </form>
+
+  <div class="btn-link-group">
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-success">
+      <i class="bi bi-speedometer2"></i> Go Back
+    </a>
+    <a href="{% url 'vendor_products' %}" class="btn btn-outline-info">
+      <i class="bi bi-box-seam"></i> Your Products
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load cart_tags %}
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center text-primary mb-5">
+    <i class="bi bi-box-seam"></i> Orders for Your Products
+  </h2>
+  <hr>
+
+  {% if order_items %}
+    <div class="row">
+      {% for item in order_items %}
+        <div class="col-md-6 mb-4">
+          <div class="card shadow-sm h-100 border-0">
+            <div class="card-body">
+              <h5 class="card-title mb-3">
+                <i class="bi bi-receipt-cutoff text-success"></i> 
+                <span class="text-dark">Order #{{ item.order.id }}</span>
+              </h5>
+
+              <p class="mb-2">
+                <i class="bi bi-person-circle text-secondary"></i>
+                <strong class="ms-2">Customer:</strong> 
+                <span class="text-dark">{{ item.order.user.username }}</span>
+              </p>
+
+              <p class="mb-2">
+                <i class="bi bi-box text-warning"></i>
+                <strong class="ms-2">Product:</strong> 
+                <span class="text-dark">{{ item.product.name }}</span>
+              </p>
+
+              <p class="mb-2">
+                <i class="bi bi-123 text-info"></i>
+                <strong class="ms-2">Quantity:</strong> 
+                <span class="text-dark">{{ item.quantity }}</span>
+              </p>
+
+              <p class="mb-2">
+                <i class="bi bi-cash text-success"></i>
+                <strong class="ms-2">Total (This Product):</strong> 
+                ₹{{ item.price|floatformat:2 }} × {{ item.quantity }} = 
+                <strong>₹{{ item.price|multiply:item.quantity }}</strong>
+              </p>
+
+              <p class="mb-3">
+                <i class="bi bi-calendar-event text-muted"></i>
+                <strong class="ms-2">Ordered On:</strong> 
+                <span class="text-dark">{{ item.order.created_at|date:"M d, Y H:i A" }}</span>
+              </p>
+
+              <form method="post" action="{% url 'update_order_status' item.order.id %}">
+                {% csrf_token %}
+                <label class="form-label fw-semibold">Update Status:</label>
+                <div class="input-group">
+                  <select name="status" class="form-select" required>
+                    {% for value, label in ORDER_STATUS %}
+                      <option value="{{ value }}" {% if item.order.status == value %}selected{% endif %}>
+                        {{ label }}
+                      </option>
+                    {% endfor %}
+                  </select>
+                  <button type="submit" class="btn btn-outline-success">Update</button>
+                </div>
+              </form>
+
+              <p class="mt-3">
+                <strong>Current Status:</strong>
+                {% if item.order.status == "Pending" %}
+                  <span class="badge bg-warning text-dark">{{ item.order.status }}</span>
+                {% elif item.order.status == "Shipped" %}
+                  <span class="badge bg-info text-dark">{{ item.order.status }}</span>
+                {% elif item.order.status == "Delivered" %}
+                  <span class="badge bg-success">{{ item.order.status }}</span>
+                {% else %}
+                  <span class="badge bg-secondary">{{ item.order.status }}</span>
+                {% endif %}
+              </p>
+
+              <hr>
+              <p>
+                <i class="bi bi-currency-rupee text-primary"></i>
+                <strong>Order Total:</strong> ₹{{ item.order.total|floatformat:2 }}
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">
+      No orders for your products yet.
+    </div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">
+      <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </a>
+  </div>
+</div>
+{% endblock %}

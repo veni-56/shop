@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load cart_tags %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="text-center mb-5 text-primary"><i class="bi bi-receipt-cutoff"></i> Your Orders</h2>
+
+  {% if orders %}
+    {% for order in orders %}
+      <div class="card shadow-lg mb-5">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+          <span><strong>Order #{{ order.id }}</strong></span>
+          <span class="badge 
+            {% if order.status == 'Pending' %} bg-warning 
+            {% elif order.status == 'Shipped' %} bg-info 
+            {% elif order.status == 'Delivered' %} bg-success 
+            {% endif %}">
+            {{ order.status }}
+          </span>
+        </div>
+        <div class="card-body">
+          <p class="mb-2 text-muted">Placed on: {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+          <ul class="list-group mb-3">
+            {% for item in order.items.all %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ item.product.name }}</strong><br>
+                  <small class="text-muted">Qty: {{ item.quantity }} | ₹{{ item.price }} each</small>
+                </div>
+
+                {% if order.status == 'Delivered' and item.product.id not in reviewed_products %}
+                  <a href="{% url 'leave_review' item.product.id %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-pencil-square"></i> Review
+                  </a>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+          <p class="fw-bold text-end">Total: ₹{{ order.total }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="alert alert-info text-center">
+      <i class="bi bi-info-circle-fill"></i> You haven't placed any orders yet.
+    </div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left"></i> Back to Shopping
+    </a>
+  </div>
+</div>
+{% endblock %}

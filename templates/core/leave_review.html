@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-sm p-4">
+    <h3 class="mb-4 text-primary">📝 Leave a Review for <strong>"{{ product.name }}"</strong></h3>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div class="mb-3">
+          <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <div class="form-text">{{ field.help_text }}</div>
+          {% endif %}
+          {% if field.errors %}
+            <div class="text-danger small">{{ field.errors }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn btn-primary">✅ Submit Review</button>
+    </form>
+
+    <div class="mt-4">
+      <a href="{% url 'order_history' %}" class="text-decoration-none">← Back to Orders</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
