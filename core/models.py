@@ -30,6 +30,10 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+from django.utils.text import slugify
+from django.utils.crypto import get_random_string
+from django.db.models import Avg
+
 class Product(models.Model):
     vendor = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -42,7 +46,12 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            base_slug = slugify(self.name)
+            slug = base_slug
+            # Ensure uniqueness
+            while Product.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{get_random_string(4)}"
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def average_rating(self):
@@ -51,7 +60,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
